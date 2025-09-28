@@ -156,7 +156,7 @@ from sentence_transformers import SentenceTransformer
 import chromadb
 from chromadb.config import Settings
 import google.generativeai as genai
-
+import ollama
 # ======================
 # 1. Configure Gemini API
 # ======================
@@ -183,7 +183,7 @@ def vector_search(query: str, top_k=3):
         query_embeddings=[query_vec],
         n_results=top_k
     )
-
+    print("🔎 Raw Chroma results:", results) 
     context = ""
     for doc, meta in zip(results["documents"][0], results["metadatas"][0]):
         context += f"📄 Page {meta['page']}:\n{doc[:400]}\n---\n"
@@ -208,7 +208,7 @@ def ask_gemini(query: str):
     {context}
     """
 
-    model_g = genai.GenerativeModel("gemini-1.5-flash")  # or "gemini-pro"
+    model_g = genai.GenerativeModel("gemini-2.5-pro")  # or "gemini-pro"
     response = model_g.generate_content(prompt)
 
     return response.text
@@ -235,4 +235,50 @@ async def root():
 @app.get("/query/{query}")
 async def get_answer(query: str):
     answer = ask_gemini(query)
+    return {"response": answer}
+# 4. Query → Context → Ollama
+# ======================
+# def ask_ollama(query: str):
+#     context = vector_search(query)
+
+#     prompt = f"""
+#     You are TaxEase.AI, a tax filing assistant.
+#     Answer the user’s query using the following context.
+#     If not found, answer from your own knowledge.
+
+#     USER QUERY: {query}
+
+#     CONTEXT:
+#     {context}
+#     """
+
+#     response = ollama.chat(
+#         model="llama3.2",
+#         messages=[{"role": "user", "content": prompt}]
+#     )
+
+#     return response["message"]["content"]
+
+# # ======================
+# # 5. FastAPI Setup
+# # ======================
+# app = FastAPI()
+
+# origins = ["http://localhost:3000", "https://f17752f60826.ngrok-free.app"]
+
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=origins,
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
+
+# @app.get("/")
+# async def root():
+#     return {"message": "TaxEase.AI backend running 🚀 (Chroma vector search)"}
+
+# @app.get("/query/{query}")
+# async def get_answer(query: str):
+    answer = ask_ollama(query)
     return {"response": answer}
