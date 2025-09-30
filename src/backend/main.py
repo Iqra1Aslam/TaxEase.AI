@@ -153,7 +153,7 @@ def ask_gemini(query: str):
 # ==============================
 app = FastAPI()
 
-origins = ["http://localhost:3000", "https://your-ngrok-url.ngrok-free.app","https://tax-front.vercel.app/"]
+origins = ["http://localhost:3000", "https://your-ngrok-url.ngrok-free.app","https://tax-front.vercel.app"]
 
 app.add_middleware(
     CORSMiddleware,
