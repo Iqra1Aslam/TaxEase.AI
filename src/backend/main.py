@@ -11,7 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 # ==============================
 # 1. Setup Google Gemini
 # ==============================
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))  # replace with os.getenv later
+genai.configure(api_key=os.getenv("AIzaSyB-SoFEpHmdQkE3LDcLKVblfRGA6PkywoI"))  # replace with os.getenv later
 
 # ==============================
 # 2. ChromaDB Setup
