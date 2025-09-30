@@ -16,7 +16,7 @@ const ChatWindow = () => {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
 
       try {
-        const response = await fetch('http://127.0.0.1:8000/query/' + message);
+        const response = await fetch('http://16.16.124.142:8000/query/' + message);
         let botText = '';
         if (response.ok) {
           const data = await response.json();
