@@ -57,7 +57,10 @@ def chunk_text(text, chunk_size=500, overlap=50):
 if collection.count() == 0:
     print("⚡ No embeddings found in ChromaDB. Creating now...")
 
-    pdf_path ="./data/instructions/1040-SE.pdf"
+    # project root = go 2 levels up from this file
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+    pdf_path = os.path.join(BASE_DIR, "data", "instructions", "1040-SE.pdf")
     pdf_data = extract_pdf_text(pdf_path)
     print(f"✅ Extracted {len(pdf_data)} pages from PDF")
 
